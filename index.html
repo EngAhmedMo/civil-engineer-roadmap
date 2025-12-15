@@ -1,25 +1,42 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المسار الهندسي | Engineer OS V16</title>
+    <title>المسار الهندسي | Engineer OS V18</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* --- Engineering Theme Variables --- */
         :root {
+            /* Default (Dark - Blueprint) */
             --bg-deep: #0f172a;       /* Slate 900 */
             --bg-card: #1e293b;       /* Slate 800 */
+            --glass-bg: rgba(30, 41, 59, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --grid-color: rgba(30, 41, 59, 0.3);
+            
+            /* Accents (Constant) */
             --accent-site: #10b981;   /* Emerald */
             --accent-shop: #3b82f6;   /* Blue */
             --accent-fin: #f59e0b;    /* Amber */
             --accent-office: #8b5cf6; /* Violet */
             --accent-bim: #ec4899;    /* Pink */
             --accent-soft: #06b6d4;   /* Cyan */
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
+        }
+
+        /* Light Theme (Paper Sketch) */
+        [data-theme="light"] {
+            --bg-deep: #f0f4f8;       /* Light Blue-Grey */
+            --bg-card: #ffffff;       /* White */
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --text-primary: #1e293b;  /* Slate 800 */
+            --text-secondary: #475569;/* Slate 600 */
+            --grid-color: rgba(0, 0, 0, 0.05);
         }
 
         body {
@@ -27,31 +44,45 @@
             background-color: var(--bg-deep);
             color: var(--text-primary);
             background-image: 
-                linear-gradient(rgba(30, 41, 59, 0.3) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(30, 41, 59, 0.3) 1px, transparent 1px);
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
             background-size: 20px 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* --- UI Components --- */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.75);
+            background: var(--glass-bg);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
         
         .nav-btn {
             position: relative; font-weight: 700; color: var(--text-secondary); transition: all 0.3s; padding: 0.5rem 1rem;
         }
-        .nav-btn:hover { color: white; }
-        .nav-active { color: white !important; background: rgba(255,255,255,0.05); border-radius: 8px; }
+        .nav-btn:hover { color: var(--text-primary); }
+        .nav-active { color: var(--text-primary) !important; background: var(--glass-border); border-radius: 8px; }
         .nav-active::after {
             content: ''; position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%);
             width: 20px; height: 2px; background-color: var(--accent-shop); border-radius: 2px;
         }
 
-        /* --- Distinct Category Styles --- */
+        /* --- Theme Toggle Button --- */
+        .theme-toggle {
+            background: var(--glass-border);
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { transform: rotate(15deg); background: var(--accent-shop); border-color: var(--accent-shop); color: white; }
+
+        /* --- Distinct Category Styles (Golden List) --- */
         .cat-site { border-color: var(--accent-site) !important; }
         .btn-site { color: var(--accent-site); border-color: var(--accent-site); }
         .btn-site:hover { background-color: var(--accent-site); color: white; }
@@ -74,21 +105,21 @@
 
         /* --- Filter Pills --- */
         .filter-pill {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary);
+            background: var(--glass-border); border: 1px solid var(--text-secondary); color: var(--text-secondary);
             padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s;
         }
         .filter-pill:hover, .filter-pill.active { background: var(--accent-shop); color: white; border-color: var(--accent-shop); }
 
         /* --- Checkbox --- */
         .custom-checkbox {
-            appearance: none; background: rgba(0,0,0,0.2); width: 1.25em; height: 1.25em;
-            border: 2px solid #475569; border-radius: 4px; display: grid; place-content: center; cursor: pointer;
+            appearance: none; background: var(--glass-border); width: 1.25em; height: 1.25em;
+            border: 2px solid var(--text-secondary); border-radius: 4px; display: grid; place-content: center; cursor: pointer;
         }
         .custom-checkbox:checked { background: var(--accent-site); border-color: var(--accent-site); }
         .custom-checkbox::before { content: "✓"; color: white; font-size: 0.8em; transform: scale(0); transition: 0.1s; }
         .custom-checkbox:checked::before { transform: scale(1); }
         
-        .task-completed { text-decoration: line-through; color: #475569; opacity: 0.7; }
+        .task-completed { text-decoration: line-through; color: var(--text-secondary); opacity: 0.7; }
         .week-locked { opacity: 0.5; pointer-events: none; filter: grayscale(0.9); }
 
         ::-webkit-scrollbar { width: 6px; }
@@ -101,44 +132,52 @@
 <body class="min-h-screen pb-12">
 
     <!-- Navigation -->
-    <nav class="glass-panel sticky top-0 z-50 border-b border-slate-700/50">
+    <nav class="glass-panel sticky top-0 z-50 border-b border-gray-700/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <!-- Logo -->
                 <div class="flex items-center gap-3">
                     <div class="bg-blue-600/20 p-2 rounded-lg border border-blue-500/30">
-                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-lg font-bold text-white leading-none">المسار الهندسي</span>
-                        <span class="text-[10px] text-blue-400 font-mono tracking-wider mt-1">Engineer OS V16.0</span>
+                        <span class="text-lg font-bold text-primary leading-none">المسار الهندسي</span>
+                        <span class="text-[10px] text-blue-500 font-mono tracking-wider mt-1">Engineer OS V18.0</span>
                     </div>
                 </div>
                 
                 <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center gap-1">
+                <div class="hidden md:flex items-center gap-2">
                     <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-btn nav-active">الرئيسية</button>
                     <button onclick="navigate('map')" id="nav-map" class="nav-btn">خارطة المهمة</button>
                     <button onclick="navigate('resources')" id="nav-resources" class="nav-btn">المصادر</button>
                     <button onclick="navigate('aibim')" id="nav-aibim" class="nav-btn">أدوات الذكاء</button>
                     <button onclick="navigate('mindset')" id="nav-mindset" class="nav-btn">عقلية المهندس</button>
+                    
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="theme-toggle ml-4" title="تبديل الوضع">
+                        <svg id="theme-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
                 </div>
 
                 <!-- Mobile Trigger -->
-                <div class="flex items-center md:hidden">
-                    <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white p-2">
+                <div class="flex items-center md:hidden gap-3">
+                    <button onclick="toggleTheme()" class="theme-toggle" title="تبديل الوضع">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="text-secondary hover:text-primary p-2">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                 </div>
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-slate-700 p-4 space-y-2">
-            <button onclick="navigate('dashboard')" class="block w-full text-right px-4 py-3 text-slate-300 hover:bg-slate-800 rounded">الرئيسية</button>
-            <button onclick="navigate('map')" class="block w-full text-right px-4 py-3 text-slate-300 hover:bg-slate-800 rounded">خارطة المهمة</button>
-            <button onclick="navigate('resources')" class="block w-full text-right px-4 py-3 text-slate-300 hover:bg-slate-800 rounded">المصادر</button>
-            <button onclick="navigate('aibim')" class="block w-full text-right px-4 py-3 text-slate-300 hover:bg-slate-800 rounded">أدوات الذكاء</button>
-            <button onclick="navigate('mindset')" class="block w-full text-right px-4 py-3 text-slate-300 hover:bg-slate-800 rounded">عقلية المهندس</button>
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-gray-700/20 p-4 space-y-2">
+            <button onclick="navigate('dashboard')" class="block w-full text-right px-4 py-3 text-secondary hover:bg-gray-700/20 rounded">الرئيسية</button>
+            <button onclick="navigate('map')" class="block w-full text-right px-4 py-3 text-secondary hover:bg-gray-700/20 rounded">خارطة المهمة</button>
+            <button onclick="navigate('resources')" class="block w-full text-right px-4 py-3 text-secondary hover:bg-gray-700/20 rounded">المصادر</button>
+            <button onclick="navigate('aibim')" class="block w-full text-right px-4 py-3 text-secondary hover:bg-gray-700/20 rounded">أدوات الذكاء</button>
+            <button onclick="navigate('mindset')" class="block w-full text-right px-4 py-3 text-secondary hover:bg-gray-700/20 rounded">عقلية المهندس</button>
         </div>
     </nav>
 
@@ -147,15 +186,15 @@
 
         <!-- VIEW: DASHBOARD -->
         <section id="view-dashboard" class="space-y-6 animate-fade-in">
-            <div class="glass-panel rounded-2xl p-8 relative overflow-hidden bg-slate-900/50">
+            <div class="glass-panel rounded-2xl p-8 relative overflow-hidden">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                     <div>
-                        <h1 class="text-3xl font-bold text-white mb-2">مؤشر الجاهزية <span class="text-blue-500">وإغلاق الفجوة</span></h1>
-                        <p class="text-slate-400 text-sm">تتبع تقدمك المهني مقارنة بمتطلبات سوق العمل المصري.</p>
+                        <h1 class="text-3xl font-bold text-primary mb-2">مؤشر الجاهزية <span class="text-blue-500">وإغلاق الفجوة</span></h1>
+                        <p class="text-secondary text-sm">تتبع تقدمك المهني مقارنة بمتطلبات سوق العمل المصري.</p>
                     </div>
                     <div class="flex items-center gap-2 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full">
                         <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                        <span class="text-green-400 text-xs font-bold">الحالة: نشط</span>
+                        <span class="text-green-500 text-xs font-bold">الحالة: نشط</span>
                     </div>
                 </div>
 
@@ -167,32 +206,32 @@
                     </div>
 
                     <div class="space-y-6">
-                        <div class="glass-panel p-6 rounded-xl border-r-4 border-blue-500 bg-slate-800/40">
+                        <div class="glass-panel p-6 rounded-xl border-r-4 border-blue-500">
                             <div class="flex justify-between items-end mb-3">
-                                <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">الإنجاز الكلي</span>
-                                <span class="text-3xl font-bold text-white" id="progress-percent">0%</span>
+                                <span class="text-secondary text-xs font-bold uppercase tracking-wider">الإنجاز الكلي</span>
+                                <span class="text-3xl font-bold text-primary" id="progress-percent">0%</span>
                             </div>
-                            <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden">
+                            <div class="w-full h-3 bg-gray-700/30 rounded-full overflow-hidden">
                                 <div id="main-progress-bar" class="h-full bg-gradient-to-l from-blue-500 to-blue-600 transition-all duration-1000" style="width: 0%"></div>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-3 gap-4">
-                            <div class="bg-slate-800/50 p-4 rounded-xl text-center border border-slate-700">
-                                <span class="block text-2xl font-bold text-white mb-1" id="completed-tasks">0</span>
-                                <span class="text-[10px] text-slate-400">مهمة منجزة</span>
+                            <div class="glass-panel p-4 rounded-xl text-center border-gray-700/20">
+                                <span class="block text-2xl font-bold text-primary mb-1" id="completed-tasks">0</span>
+                                <span class="text-[10px] text-secondary">مهمة منجزة</span>
                             </div>
-                            <div class="bg-slate-800/50 p-4 rounded-xl text-center border border-slate-700">
+                            <div class="glass-panel p-4 rounded-xl text-center border-gray-700/20">
                                 <span class="block text-2xl font-bold text-amber-500 mb-1" id="xp-points">0</span>
-                                <span class="text-[10px] text-slate-400">نقاط (XP)</span>
+                                <span class="text-[10px] text-secondary">نقاط (XP)</span>
                             </div>
-                            <div class="bg-slate-800/50 p-4 rounded-xl text-center border border-slate-700">
+                            <div class="glass-panel p-4 rounded-xl text-center border-gray-700/20">
                                 <span class="block text-2xl font-bold text-green-500 mb-1" id="current-week-disp">1</span>
-                                <span class="text-[10px] text-slate-400">الأسبوع</span>
+                                <span class="text-[10px] text-secondary">الأسبوع</span>
                             </div>
                         </div>
 
-                        <button onclick="navigate('map')" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-all shadow-lg shadow-blue-900/20 flex items-center justify-center gap-2">
+                        <button onclick="navigate('map')" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2">
                             استئناف الخطة التدريبية
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                         </button>
@@ -204,12 +243,13 @@
         <!-- VIEW: RESOURCES -->
         <section id="view-resources" class="hidden space-y-8 animate-fade-in">
             <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-white mb-3">القائمة الذهبية <span class="text-amber-500 text-sm block md:inline md:text-xl">(Verified Assets)</span></h2>
-                <p class="text-slate-400 text-sm max-w-2xl mx-auto bg-slate-800/50 p-3 rounded-lg border border-slate-700">
+                <h2 class="text-2xl font-bold text-primary mb-3">القائمة الذهبية <span class="text-amber-500 text-sm block md:inline md:text-xl">(Verified Assets)</span></h2>
+                <p class="text-secondary text-sm max-w-2xl mx-auto glass-panel p-3 rounded-lg">
                     المصادر أدناه تم اختيارها لتكون "المرجع النهائي" (Zero-to-Hero). تغطي الجانب العملي والكود المصري.
                 </p>
             </div>
 
+            <!-- Filters -->
             <div class="flex flex-wrap justify-center gap-2 mb-8">
                 <button onclick="filterResources('all')" class="filter-pill active" id="btn-all">الكل</button>
                 <button onclick="filterResources('Site')" class="filter-pill" id="btn-Site">تنفيذ (Site)</button>
@@ -226,55 +266,55 @@
 
         <!-- VIEW: AI & BIM -->
         <section id="view-aibim" class="hidden space-y-8 animate-fade-in">
-            <div class="glass-panel p-8 rounded-xl border-l-4 border-purple-500 bg-slate-900/50">
-                <h2 class="text-2xl font-bold text-white mb-2">الدليل التشغيلي للذكاء الاصطناعي <span class="text-purple-400">(AI Operations Manual)</span></h2>
-                <p class="text-slate-400 text-sm leading-relaxed">
+            <div class="glass-panel p-8 rounded-xl border-l-4 border-purple-500">
+                <h2 class="text-2xl font-bold text-primary mb-2">الدليل التشغيلي للذكاء الاصطناعي <span class="text-violet-400">(AI Operations Manual)</span></h2>
+                <p class="text-secondary text-sm leading-relaxed">
                     كيفية استخدام أدوات الذكاء الاصطناعي كمهندس لرفع الإنتاجية وجودة المخرجات.
                 </p>
             </div>
 
             <div class="grid lg:grid-cols-2 gap-6">
                 <!-- NotebookLM -->
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-green-500 bg-slate-800/20">
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-green-500">
                     <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-bold text-white">1. Google NotebookLM ⚡</h3>
-                        <a href="https://notebooklm.google.com/" target="_blank" class="text-xs bg-green-900/50 border border-green-500/50 px-3 py-1 rounded text-green-300 hover:bg-green-800 transition">فتح الأداة</a>
+                        <h3 class="text-xl font-bold text-primary">1. Google NotebookLM ⚡</h3>
+                        <a href="https://notebooklm.google.com/" target="_blank" class="text-xs bg-green-500/10 border border-green-500/50 px-3 py-1 rounded text-green-500 hover:bg-green-500 hover:text-white transition">فتح الأداة</a>
                     </div>
-                    <p class="text-sm text-slate-300 mb-4 font-bold">الوظيفة: "المذاكرة وتلخيص الأكواد".</p>
-                    <div class="bg-black/30 p-3 rounded border border-white/5 space-y-2">
-                        <strong class="text-green-400 text-xs block">خطوات الاستخدام:</strong>
-                        <p class="text-xs text-slate-400">ارفع ملفات الـ PDF (مثل الكود المصري) واسأل: <br><span class="text-white">"لخص لي اشتراطات استلام الأعمدة."</span></p>
+                    <p class="text-sm text-secondary mb-4 font-bold">الوظيفة: "مساعد المذاكرة والبحث في الأكواد".</p>
+                    <div class="bg-gray-500/10 p-3 rounded border border-gray-500/20 space-y-2">
+                        <strong class="text-green-500 text-xs block">خطوات الاستخدام:</strong>
+                        <p class="text-xs text-secondary">ارفع ملفات الـ PDF (مثل الكود المصري) واسأل: <br><span class="text-primary">"لخص لي اشتراطات استلام الأعمدة."</span></p>
                     </div>
                 </div>
 
                 <!-- ChatGPT / Claude -->
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-blue-500 bg-slate-800/20">
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-blue-500">
                     <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-bold text-white">2. ChatGPT / Claude 🤖</h3>
+                        <h3 class="text-xl font-bold text-primary">2. ChatGPT / Claude 🤖</h3>
                         <div class="flex gap-2">
-                            <a href="https://chatgpt.com/" target="_blank" class="text-xs bg-blue-900/50 border border-blue-500/50 px-3 py-1 rounded text-blue-300 hover:bg-blue-800">ChatGPT</a>
-                            <a href="https://claude.ai/" target="_blank" class="text-xs bg-orange-900/50 border border-orange-500/50 px-3 py-1 rounded text-orange-300 hover:bg-orange-800">Claude</a>
+                            <a href="https://chatgpt.com/" target="_blank" class="text-xs bg-blue-500/10 border border-blue-500/50 px-3 py-1 rounded text-blue-500 hover:bg-blue-500 hover:text-white transition">ChatGPT</a>
+                            <a href="https://claude.ai/" target="_blank" class="text-xs bg-orange-500/10 border border-orange-500/50 px-3 py-1 rounded text-orange-500 hover:bg-orange-500 hover:text-white transition">Claude</a>
                         </div>
                     </div>
-                    <p class="text-sm text-slate-300 mb-4 font-bold">الوظيفة: "كتابة الإيميلات والتقارير".</p>
-                    <div class="bg-black/30 p-3 rounded border border-white/5 space-y-2">
-                        <strong class="text-blue-400 text-xs block">نصيحة (Pro Prompt):</strong>
-                        <p class="text-xs text-slate-400">حدد الدور والمهمة: "بصفتك مدير مشروع، اكتب رداً رسمياً للاستشاري بخصوص..."</p>
+                    <p class="text-sm text-secondary mb-4 font-bold">الوظيفة: "كتابة الإيميلات والتقارير".</p>
+                    <div class="bg-gray-500/10 p-3 rounded border border-gray-500/20 space-y-2">
+                        <strong class="text-blue-500 text-xs block">نصيحة (Pro Prompt):</strong>
+                        <p class="text-xs text-secondary">حدد الدور والمهمة: "بصفتك مدير مشروع، اكتب رداً رسمياً للاستشاري بخصوص..."</p>
                     </div>
                 </div>
 
                 <!-- Excel AI -->
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-yellow-500 bg-slate-800/20 col-span-1 lg:col-span-2">
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-yellow-500 col-span-1 lg:col-span-2">
                     <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-bold text-white">3. Excel Formula Bot 📊</h3>
+                        <h3 class="text-xl font-bold text-primary">3. Excel Formula Bot 📊</h3>
                         <span class="text-xs text-yellow-500 border border-yellow-500/30 px-2 py-1 rounded">داخل ChatGPT</span>
                     </div>
-                    <p class="text-sm text-slate-300 mb-4 leading-relaxed">
+                    <p class="text-sm text-secondary mb-4 leading-relaxed">
                         استخدم ChatGPT لتحويل طلبك إلى معادلة Excel.
                     </p>
-                    <div class="bg-black/30 p-3 rounded border border-white/5">
-                        <strong class="text-yellow-400 text-xs block mb-2">مثال (Prompt):</strong>
-                        <p class="text-xs text-slate-200 font-mono">
+                    <div class="bg-gray-500/10 p-3 rounded border border-gray-500/20">
+                        <strong class="text-yellow-500 text-xs block mb-2">مثال (Prompt):</strong>
+                        <p class="text-xs text-secondary font-mono">
                             "Write an Excel formula to SUM Column C IF Column A is 'Concrete' AND Column B date is > 01/01/2025."
                         </p>
                     </div>
@@ -282,58 +322,78 @@
             </div>
         </section>
 
-        <!-- VIEW: MINDSET (FINAL POLISH) -->
+        <!-- VIEW: MINDSET -->
         <section id="view-mindset" class="hidden space-y-8 animate-fade-in">
-            <div class="glass-panel p-8 rounded-xl border-l-4 border-soft bg-gradient-to-r from-slate-900 to-cyan-900/10">
-                <h2 class="text-2xl font-bold text-white mb-3">عقلية المهندس <span class="text-cyan-400">(Soft Skills Deep Dive)</span></h2>
-                <p class="text-slate-300 text-sm leading-relaxed max-w-3xl">
-                    المصادر أدناه هي "شرارة البدء" لتطوير مهاراتك في القيادة والإدارة. النجاح في الموقع يتطلب ذكاءً اجتماعياً بقدر الذكاء الهندسي.
+            <div class="glass-panel p-8 rounded-xl border-l-4 border-cyan-500">
+                <h2 class="text-2xl font-bold text-primary mb-3">عقلية المهندس <span class="text-cyan-500">(Soft Skills Deep Dive)</span></h2>
+                <p class="text-secondary text-sm leading-relaxed max-w-3xl">
+                    <strong class="text-primary">تنبيه هام:</strong> الهندسة ليست مجرد معادلات ولوحات. النجاح في الموقع يعتمد 80% على إدارتك للبشر، و20% على التقنيات.
                 </p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <!-- Book 1 -->
-                <div class="glass-panel p-6 rounded-xl border border-slate-700 hover:border-soft transition group bg-slate-800/20">
-                    <h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition mb-2">الإنتاجية والالتزام (Discipline)</h3>
-                    <p class="text-xs text-slate-500 mb-3 font-mono">كتاب: العادات الذرية (Atomic Habits)</p>
-                    <p class="text-sm text-slate-300 mb-4 leading-relaxed">لبناء عادة الالتزام بالتقارير اليومية والمذاكرة المستمرة.</p>
+                <div class="glass-panel p-6 rounded-xl border border-gray-700/30 hover:border-cyan-500 transition group">
+                    <h3 class="text-lg font-bold text-primary group-hover:text-cyan-500 transition mb-2">الإنتاجية والالتزام (Discipline)</h3>
+                    <p class="text-xs text-secondary mb-3 font-mono">كتاب: العادات الذرية (Atomic Habits)</p>
+                    <div class="bg-gray-500/10 p-3 rounded border-l-2 border-cyan-500/50 mb-3">
+                        <p class="text-xs text-secondary leading-relaxed">
+                            <strong class="text-cyan-500 block mb-1">الربط الهندسي:</strong>
+                            الالتزام بكتابة "التقارير اليومية" المملة، ومراجعة "Checklists" السلامة، هي عادات صغيرة تراكمية.
+                        </p>
+                    </div>
                     <a href="https://www.youtube.com/results?search_query=%D9%85%D9%84%D8%AE%D8%B5+%D9%83%D8%AA%D8%A7%D8%A8+%D8%A7%D9%84%D8%B9%D8%A7%D8%AF%D8%A7%D8%AA+%D8%A7%D9%84%D8%B0%D8%B1%D9%8A%D8%A9+%D8%B9%D9%84%D9%8A+%D9%85%D8%AD%D9%85%D8%AF+%D8%B9%D9%84%D9%8A" target="_blank" class="text-cyan-500 text-xs font-bold hover:underline">استماع للملخص &rarr;</a>
                 </div>
 
                 <!-- Book 2 -->
-                <div class="glass-panel p-6 rounded-xl border border-slate-700 hover:border-soft transition group bg-slate-800/20">
-                    <h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition mb-2">القيادة وإدارة البشر (Leadership)</h3>
-                    <p class="text-xs text-slate-500 mb-3 font-mono">كتاب: كيف تكسب الأصدقاء (How to Win Friends)</p>
-                    <p class="text-sm text-slate-300 mb-4 leading-relaxed">فن التعامل مع العمال وتوجيههم بذكاء.</p>
-                    <a href="https://www.youtube.com/results?search_query=%D9%85%D9%84%D8%AE%D8%B5+%D9%83%D8%AA%D8%A7%D8%A8+%D9%83%D9%8A%D9%81+%D8%AA%D9%83%D8%B3%D8%A8+%D8%A7%D9%84%D8%A3%D8%B5%D8%AF%D9%82%D8%A7%D8%A1+%D8%B9%D9%84%D9%8A+%D9%85%D8%AD%D9%85%D8%AF+%D8%B9%D9%84%D9%8A" target="_blank" class="text-cyan-500 text-xs font-bold hover:underline">استماع للملخص &rarr;</a>
+                <div class="glass-panel p-6 rounded-xl border border-gray-700/30 hover:border-cyan-500 transition group">
+                    <h3 class="text-lg font-bold text-primary group-hover:text-cyan-500 transition mb-2">القيادة وإدارة البشر (Leadership)</h3>
+                    <p class="text-xs text-secondary mb-3 font-mono">كتاب: كيف تكسب الأصدقاء وتؤثر في الناس (How to Win Friends)</p>
+                    <div class="bg-gray-500/10 p-3 rounded border-l-2 border-cyan-500/50 mb-3">
+                        <p class="text-xs text-secondary leading-relaxed">
+                            <strong class="text-cyan-500 block mb-1">الربط الهندسي:</strong>
+                            فن التعامل مع الصنايعية. كيف توجه الملاحظات وإقناعهم بتنفيذها برضا.
+                        </p>
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=%D9%85%D9%84%D8%AE%D8%B5+%D9%83%D8%AA%D8%A7%D8%A8+%D9%83%D9%8A%D9%81+%D8%AA%D9%83%D8%B3%D8%A8+%D8%A7%D9%84%D8%A3%D8%B5%D8%AF%D9%82%D8%A7%D8%A1+%D9%88%D8%AA%D8%A4%D8%AB%D8%B1+%D9%81%D9%8A+%D8%A7%D9%84%D9%86%D8%A7%D8%B3+%D8%B9%D9%84%D9%8A+%D9%85%D8%AD%D9%85%D8%AF+%D8%B9%D9%84%D9%8A" target="_blank" class="text-cyan-500 text-xs font-bold hover:underline">استماع للملخص &rarr;</a>
                 </div>
 
                 <!-- Book 3 -->
-                <div class="glass-panel p-6 rounded-xl border border-slate-700 hover:border-soft transition group bg-slate-800/20">
-                    <h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition mb-2">إدارة الضغوط (Resilience)</h3>
-                    <p class="text-xs text-slate-500 mb-3 font-mono">كتاب: دع القلق وابدأ الحياة (Stop Worrying)</p>
-                    <p class="text-sm text-slate-300 mb-4 leading-relaxed">الحفاظ على الهدوء في أيام الصب والمشاكل الطارئة.</p>
+                <div class="glass-panel p-6 rounded-xl border border-gray-700/30 hover:border-cyan-500 transition group">
+                    <h3 class="text-lg font-bold text-primary group-hover:text-cyan-500 transition mb-2">إدارة الضغوط (Resilience)</h3>
+                    <p class="text-xs text-secondary mb-3 font-mono">كتاب: دع القلق وابدأ الحياة (Stop Worrying)</p>
+                    <div class="bg-gray-500/10 p-3 rounded border-l-2 border-cyan-500/50 mb-3">
+                        <p class="text-xs text-secondary leading-relaxed">
+                            <strong class="text-cyan-500 block mb-1">الربط الهندسي:</strong>
+                            يوم "صب السقف" هو يوم حرب. الكتاب يعلمك الفصل بين "المشكلة" و"قلقك منها".
+                        </p>
+                    </div>
                     <a href="https://www.youtube.com/results?search_query=%D9%85%D9%84%D8%AE%D8%B5+%D9%83%D8%AA%D8%A7%D8%A8+%D8%AF%D8%B9+%D8%A7%D9%84%D9%82%D9%84%D9%82+%D9%88%D8%A7%D8%A8%D8%AF%D8%A3+%D8%A7%D9%84%D8%AD%D9%8A%D8%A7%D8%A9+%D8%B9%D9%84%D9%8A+%D9%85%D8%AD%D9%85%D8%AF+%D8%B9%D9%84%D9%8A" target="_blank" class="text-cyan-500 text-xs font-bold hover:underline">استماع للملخص &rarr;</a>
                 </div>
 
                 <!-- Book 4 -->
-                <div class="glass-panel p-6 rounded-xl border border-slate-700 hover:border-soft transition group bg-slate-800/20">
-                    <h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition mb-2">فن التفاوض (Negotiation)</h3>
-                    <p class="text-xs text-slate-500 mb-3 font-mono">كتاب: لا تساوم على الفرق أبداً (Never Split the Difference)</p>
-                    <p class="text-sm text-slate-300 mb-4 leading-relaxed">للتفاوض مع المقاولين والاستشاري.</p>
+                <div class="glass-panel p-6 rounded-xl border border-gray-700/30 hover:border-cyan-500 transition group">
+                    <h3 class="text-lg font-bold text-primary group-hover:text-cyan-500 transition mb-2">فن التفاوض (Negotiation)</h3>
+                    <p class="text-xs text-secondary mb-3 font-mono">كتاب: لا تساوم على الفرق أبداً (Never Split the Difference)</p>
+                    <div class="bg-gray-500/10 p-3 rounded border-l-2 border-cyan-500/50 mb-3">
+                        <p class="text-xs text-secondary leading-relaxed">
+                            <strong class="text-cyan-500 block mb-1">الربط الهندسي:</strong>
+                            ستتفاوض يومياً: مع الاستشاري لاستلام بند، ومع المقاولين على الأسعار.
+                        </p>
+                    </div>
                     <a href="https://www.youtube.com/results?search_query=%D9%85%D9%84%D8%AE%D8%B5+%D9%83%D8%AA%D8%A7%D8%A8+%D9%84%D8%A7+%D8%AA%D8%B3%D8%A7%D9%88%D9%85+%D8%B9%D9%84%D9%89+%D8%A7%D9%84%D9%81%D8%B1%D9%82+%D8%A3%D8%A8%D8%AF%D8%A7%D9%8B+%D8%B9%D9%84%D9%8A+%D9%85%D8%AD%D9%85%D8%AF+%D8%B9%D9%84%D9%8A" target="_blank" class="text-cyan-500 text-xs font-bold hover:underline">استماع للملخص &rarr;</a>
                 </div>
             </div>
         </section>
 
-        <!-- VIEW: MAP (SCHEDULE - LINGUISTIC PRECISION) -->
+        <!-- VIEW: MAP (SCHEDULE) -->
         <section id="view-map" class="hidden space-y-6 animate-fade-in">
              <div class="glass-panel p-6 rounded-xl border-l-4 border-blue-500 flex justify-between items-center">
                 <div>
-                    <h2 class="text-2xl font-bold text-white">خارطة المهمة (14 أسبوع)</h2>
-                    <p class="text-slate-400 mt-1 text-sm">نظام الساعتين: مشاهدة (Input) + تطبيق (Output).</p>
+                    <h2 class="text-2xl font-bold text-primary">خارطة المهمة (14 أسبوع)</h2>
+                    <p class="text-secondary mt-1 text-sm">نظام الساعتين: مشاهدة (Input) + تطبيق (Output).</p>
                 </div>
-                 <button onclick="resetProgress()" class="text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-3 py-1 rounded">إعادة ضبط</button>
+                 <button onclick="resetProgress()" class="text-xs text-red-400 hover:text-red-600 border border-red-500/30 px-3 py-1 rounded transition-colors">إعادة ضبط</button>
             </div>
             
             <div id="schedule-container" class="space-y-4">
@@ -355,7 +415,7 @@
             { title: "Revit Structure Essentials", instructor: "م. كريم عادل", cat: "BIM", url: "https://www.youtube.com/playlist?list=PLDHUI0BRXyH9N22baH_GWyD3ZcWvlkont", cssClass: "cat-bim", btnClass: "btn-bim" }
         ];
 
-        // --- 2. SCHEDULE DATA (TECHNICAL TERMS VERIFIED) ---
+        // --- 2. SCHEDULE DATA (TECHNICAL TERMS) ---
         const scheduleWeeks = [
             // PHASE 1: SITE
             { id: 1, title: "أسبوع 1: الأعمال الترابية والأساسات", source: "وليد الجنيدي (قائمة الخرسانات)", days: [
@@ -387,7 +447,7 @@
                 { name: "الأحد", tasks: ["أنواع الطوب (Brick Types)", "طرق الربط (Bonding Styles)"] },
                 { name: "الاثنين", tasks: ["التشحيط والعراميس (Pinning & Joints)", "حساب الكميات"] },
                 { name: "الثلاثاء", tasks: ["استلام المباني (Inspection)", "السواعى والقدة (Verticality & Straightness)"] },
-                { name: "الأربعاء", tasks: ["الأعتاب والفتحات (Lintels & Openings)", "الخلوصات"] }
+                { name: "الأربعاء", tasks: ["الأعتاب والفتحات (Lintels & Openings)", "الخلوصات (Tolerances)"] }
             ]},
             { id: 6, title: "أسبوع 6: العزل والسباكة", source: "محمد بدوي + منارة التنفيذ", days: [
                 { name: "الأحد", tasks: ["عزل الرطوبة (Damp Proofing)", "رقبة الزجاجة (Angle Fillet)"] },
@@ -448,21 +508,23 @@
         ];
 
         // --- 3. STATE MANAGEMENT ---
-        let state = JSON.parse(localStorage.getItem('civilForgeV16')) || {
+        let state = JSON.parse(localStorage.getItem('civilForgeV18')) || {
             completed: [], 
-            unlocked: [1]
+            unlocked: [1],
+            currentView: 'dashboard'
         };
 
         function saveState() {
-            localStorage.setItem('civilForgeV16', JSON.stringify(state));
+            localStorage.setItem('civilForgeV18', JSON.stringify(state));
             updateDashboard();
             renderSchedule();
         }
         
         function resetProgress() {
             if(confirm("تحذير: سيتم مسح كل التقدم والبدء من الأسبوع الأول. هل أنت متأكد؟")) {
-                state = { completed: [], unlocked: [1] };
+                state = { completed: [], unlocked: [1], currentView: 'dashboard' };
                 saveState();
+                navigate('dashboard');
             }
         }
 
@@ -484,8 +546,27 @@
             }
         }
 
-        // --- 4. RENDERERS ---
+        // --- 4. THEME & NAVIGATION ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('themePref', next);
+            
+            // Update Chart Colors if needed
+            if(chartInstance) {
+                chartInstance.options.scales.r.grid.color = next === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+                chartInstance.options.scales.r.angleLines.color = next === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+                chartInstance.options.scales.r.pointLabels.color = next === 'dark' ? '#94a3b8' : '#475569';
+                chartInstance.update();
+            }
+        }
+
         function navigate(view) {
+            state.currentView = view;
+            saveState();
+
             document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${view}`).classList.remove('hidden');
             
@@ -497,6 +578,7 @@
 
         function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
+        // --- 5. RENDERERS ---
         function filterResources(filter) {
             const grid = document.getElementById('resources-grid');
             grid.innerHTML = '';
@@ -508,16 +590,16 @@
 
             list.forEach(r => {
                 grid.innerHTML += `
-                    <div class="glass-panel p-5 rounded-xl border-r-4 ${r.cssClass} bg-slate-800/40 hover:bg-slate-800/60 transition-all">
+                    <div class="glass-panel p-5 rounded-xl border-r-4 ${r.cssClass} transition-all hover:scale-[1.01]">
                         <div class="flex justify-between mb-3">
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-900/50 px-2 py-1 rounded border border-slate-700">${r.cat}</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-secondary opacity-80 px-2 py-1 rounded border border-gray-500/20">${r.cat}</span>
                             <div class="flex gap-1 items-center">
                                 <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                                <span class="text-[10px] text-green-400 font-bold">Verified</span>
+                                <span class="text-[10px] text-green-500 font-bold">Verified</span>
                             </div>
                         </div>
-                        <h3 class="text-base font-bold text-white mb-1 leading-snug">${r.title}</h3>
-                        <p class="text-xs text-slate-400 mb-4 font-mono">Instructor: ${r.instructor}</p>
+                        <h3 class="text-base font-bold text-primary mb-1 leading-snug">${r.title}</h3>
+                        <p class="text-xs text-secondary mb-4 font-mono">Instructor: ${r.instructor}</p>
                         <a href="${r.url}" target="_blank" class="block w-full text-center py-2 border rounded transition-all text-xs font-bold ${r.btnClass}">
                             الذهاب للمصدر ↗
                         </a>
@@ -543,14 +625,14 @@
 
                 if(locked) {
                     container.innerHTML += `
-                        <div class="glass-panel p-6 rounded-xl border border-slate-700/50 week-locked relative">
+                        <div class="glass-panel p-6 rounded-xl border border-gray-500/20 week-locked relative">
                             <div class="absolute inset-0 flex items-center justify-center z-10">
-                                <div class="bg-slate-900/90 px-4 py-2 rounded-lg text-slate-300 font-bold flex items-center gap-2 border border-slate-700">
+                                <div class="bg-gray-900/90 px-4 py-2 rounded-lg text-gray-300 font-bold flex items-center gap-2 border border-gray-600">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                                     محتوى مغلق (أكمل الأسبوع السابق)
                                 </div>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-600">${week.title}</h3>
+                            <h3 class="text-xl font-bold text-secondary">${week.title}</h3>
                         </div>
                     `;
                     return;
@@ -563,33 +645,33 @@
                         const tid = `w${week.id}-d${di}-t${ti}`;
                         const checked = state.completed.includes(tid);
                         tasks += `
-                            <label class="flex items-center gap-3 p-2 rounded hover:bg-white/5 cursor-pointer transition">
+                            <label class="flex items-center gap-3 p-2 rounded hover:bg-gray-500/10 cursor-pointer transition">
                                 <input type="checkbox" class="custom-checkbox" onchange="toggleTask('${tid}', ${week.id})" ${checked ? 'checked' : ''}>
-                                <span class="text-sm ${checked ? 'task-completed' : 'text-slate-300'}">${t}</span>
+                                <span class="text-sm ${checked ? 'task-completed' : 'text-secondary'}">${t}</span>
                             </label>
                         `;
                     });
-                    daysHtml += `<div class="mb-4 last:mb-0"><h4 class="text-blue-400 text-xs font-bold uppercase mb-2 border-b border-white/5 pb-1">${d.name}</h4>${tasks}</div>`;
+                    daysHtml += `<div class="mb-4 last:mb-0"><h4 class="text-blue-500 text-xs font-bold uppercase mb-2 border-b border-gray-500/20 pb-1">${d.name}</h4>${tasks}</div>`;
                 });
 
                 let unlockBtn = '';
                 if(isFull && !state.unlocked.includes(week.id+1) && week.id < 14) {
-                    unlockBtn = `<button onclick="unlockNext(${week.id})" class="mt-4 w-full py-2 bg-green-600 hover:bg-green-500 text-white font-bold rounded shadow-lg shadow-green-900/50 transition animate-pulse">فتح الأسبوع التالي 🔓</button>`;
+                    unlockBtn = `<button onclick="unlockNext(${week.id})" class="mt-4 w-full py-2 bg-green-600 hover:bg-green-500 text-white font-bold rounded shadow-lg shadow-green-500/30 transition animate-pulse">فتح الأسبوع التالي 🔓</button>`;
                 }
 
                 container.innerHTML += `
-                    <div class="glass-panel p-6 rounded-xl border-r-4 ${isFull ? 'border-green-500' : 'border-slate-600'} bg-slate-800/20">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b border-slate-700/50 pb-4">
+                    <div class="glass-panel p-6 rounded-xl border-r-4 ${isFull ? 'border-green-500' : 'border-gray-500'} transition-all hover:shadow-lg">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b border-gray-500/20 pb-4">
                             <div>
-                                <h3 class="text-lg font-bold text-white">${week.title}</h3>
-                                <div class="text-sm text-slate-400 mt-1 flex items-center gap-2">
+                                <h3 class="text-lg font-bold text-primary">${week.title}</h3>
+                                <div class="text-sm text-secondary mt-1 flex items-center gap-2">
                                     <span class="text-amber-500">⚠ المصدر:</span> ${week.source}
                                 </div>
                             </div>
-                            <span class="text-xs font-bold ${isFull ? 'text-green-400' : 'text-slate-400'} bg-slate-900/80 px-2 py-1 rounded mt-2 md:mt-0">${pct}%</span>
+                            <span class="text-xs font-bold ${isFull ? 'text-green-500' : 'text-secondary'} opacity-80 px-2 py-1 rounded mt-2 md:mt-0">${pct}%</span>
                         </div>
-                        <div class="w-full bg-slate-900 h-1 rounded-full mb-6 overflow-hidden">
-                            <div class="h-full ${isFull ? 'bg-green-500' : 'bg-slate-600'} transition-all duration-500" style="width: ${pct}%"></div>
+                        <div class="w-full bg-gray-500/20 h-1 rounded-full mb-6 overflow-hidden">
+                            <div class="h-full ${isFull ? 'bg-green-500' : 'bg-gray-500'} transition-all duration-500" style="width: ${pct}%"></div>
                         </div>
                         <div class="grid md:grid-cols-2 gap-6">${daysHtml}</div>
                         ${unlockBtn}
@@ -598,7 +680,7 @@
             });
         }
 
-        // --- 5. DASHBOARD ---
+        // --- 6. DASHBOARD & CHART ---
         let chartInstance = null;
 
         function updateDashboard() {
@@ -639,6 +721,10 @@
             const ctx = document.getElementById('gapRadarChart');
             if(!ctx) return;
 
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+            const textColor = isDark ? '#94a3b8' : '#475569';
+
             const data = {
                 labels: ['تنفيذ (Site)', 'تشطيبات (Fin)', 'Shop Drawing', 'مكتب فني', 'BIM'],
                 datasets: [
@@ -656,13 +742,16 @@
                         backgroundColor: 'rgba(59, 130, 246, 0.5)',
                         borderColor: '#3b82f6',
                         borderWidth: 2,
-                        pointBackgroundColor: '#fff'
+                        pointBackgroundColor: isDark ? '#fff' : '#1e293b'
                     }
                 ]
             };
 
             if(chartInstance) {
                 chartInstance.data = data;
+                chartInstance.options.scales.r.grid.color = gridColor;
+                chartInstance.options.scales.r.angleLines.color = gridColor;
+                chartInstance.options.scales.r.pointLabels.color = textColor;
                 chartInstance.update();
             } else {
                 chartInstance = new Chart(ctx, {
@@ -673,9 +762,9 @@
                         scales: {
                             r: {
                                 min: 0, max: 100,
-                                angleLines: { color: 'rgba(255,255,255,0.1)' },
-                                grid: { color: 'rgba(255,255,255,0.1)' },
-                                pointLabels: { color: '#94a3b8', font: { family: 'Cairo', size: 11 } },
+                                angleLines: { color: gridColor },
+                                grid: { color: gridColor },
+                                pointLabels: { color: textColor, font: { family: 'Cairo', size: 11 } },
                                 ticks: { display: false }
                             }
                         },
@@ -687,9 +776,17 @@
 
         // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Load Theme
+            const savedTheme = localStorage.getItem('themePref') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
             filterResources('all');
             renderSchedule();
             updateDashboard();
+            
+            // Restore View
+            const savedView = state.currentView || 'dashboard';
+            navigate(savedView);
         });
 
     </script>
