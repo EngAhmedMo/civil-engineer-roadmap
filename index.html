@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المسار الهندسي | Engineer OS Cloud</title>
+    <title>المسار الهندسي | Engineer OS</title>
     
     <!-- أيقونة الموقع -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%233b82f6%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4%22/></svg>">
@@ -22,14 +22,11 @@
     <style>
         /* --- Themes System --- */
         :root {
-            --bg-deep: #0f172a; 
-            --bg-card: #1e293b; 
-            --glass-bg: rgba(30, 41, 59, 0.95);
-            --text-primary: #f8fafc; 
-            --text-secondary: #94a3b8;
-            --accent-main: #3b82f6; 
+            --bg-deep: #0f172a; --bg-card: #1e293b; --glass-bg: rgba(30, 41, 59, 0.95);
+            --text-primary: #f8fafc; --text-secondary: #94a3b8;
+            --accent-main: #3b82f6; --accent-warn: #f59e0b;
             
-            /* Categories Colors */
+            /* Categories Colors (From V18) */
             --col-site: #10b981; --col-shop: #3b82f6; --col-fin: #f59e0b;
             --col-office: #8b5cf6; --col-bim: #ec4899;
         }
@@ -43,7 +40,9 @@
             font-family: 'Cairo', sans-serif;
             background-color: var(--bg-deep);
             color: var(--text-primary);
-            background-image: radial-gradient(#3b82f61a 1px, transparent 1px);
+            /* Engineering Grid Background */
+            background-image: linear-gradient(rgba(100,100,100,0.05) 1px, transparent 1px), 
+                            linear-gradient(90deg, rgba(100,100,100,0.05) 1px, transparent 1px);
             background-size: 20px 20px;
             transition: all 0.3s;
         }
@@ -53,12 +52,13 @@
             background: var(--bg-card);
             border: 1px solid rgba(255,255,255,0.05);
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            backdrop-filter: blur(12px);
         }
 
-        /* --- New Auth UI (Matching Image) --- */
+        /* --- NEW AUTH UI (V20 Design) --- */
         #auth-modal {
             position: fixed; inset: 0; z-index: 100;
-            background: rgba(10, 15, 30, 0.95); /* Darker overlay */
+            background: rgba(10, 15, 30, 0.95);
             backdrop-filter: blur(5px);
             display: flex; align-items: center; justify-content: center;
             opacity: 0; pointer-events: none; transition: opacity 0.3s;
@@ -67,80 +67,61 @@
         
         .auth-card {
             width: 100%; max-width: 400px;
-            background-color: #0f172a; /* Deep Slate */
-            border: 1px solid #3b82f6; /* Blue Border */
-            border-radius: 1.5rem; /* Rounded 2xl */
+            background-color: #0f172a;
+            border: 1px solid #3b82f6; /* Neon Blue Border */
+            border-radius: 1.5rem;
             padding: 2.5rem;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); /* Soft Blue Glow */
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
             transform: translateY(20px); transition: transform 0.3s;
             text-align: center;
         }
         #auth-modal.active .auth-card { transform: translateY(0); }
 
         .auth-input {
-            width: 100%;
-            background-color: #1e293b; /* Input Bg */
-            border: 1px solid transparent;
-            border-radius: 0.5rem;
-            padding: 14px 16px;
-            color: white;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-            outline: none;
-            transition: all 0.2s;
+            width: 100%; background-color: #1e293b; border: 1px solid transparent;
+            border-radius: 0.5rem; padding: 14px 16px; color: white;
+            font-size: 0.95rem; margin-bottom: 1rem; outline: none; transition: all 0.2s;
         }
-        .auth-input:focus {
-            border-color: #3b82f6;
-            background-color: #1e293b;
-        }
+        .auth-input:focus { border-color: #3b82f6; background-color: #1e293b; }
         .auth-input::placeholder { color: #64748b; }
 
         .btn-auth-primary {
-            width: 100%;
-            background-color: #3b82f6; /* Blue 500 */
-            color: white;
-            font-weight: bold;
-            padding: 12px;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: hover 0.2s;
-            margin-bottom: 1.5rem;
+            width: 100%; background-color: #3b82f6; color: white; font-weight: bold;
+            padding: 12px; border-radius: 0.5rem; font-size: 1rem; transition: 0.2s; margin-bottom: 1.5rem;
         }
         .btn-auth-primary:hover { background-color: #2563eb; }
 
         .btn-google {
-            width: 100%;
-            background-color: white;
-            color: #1e293b;
-            font-weight: bold;
-            padding: 12px;
-            border-radius: 0.5rem;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; background-color: white; color: #1e293b; font-weight: bold;
+            padding: 12px; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 10px;
             transition: 0.2s;
         }
         .btn-google:hover { background-color: #f1f5f9; }
 
-        .separator {
-            display: flex; align-items: center;
-            color: #64748b; font-size: 0.85rem; margin-bottom: 1.5rem;
-        }
-        .separator::before, .separator::after {
-            content: ""; flex: 1; height: 1px; background: #334155;
-        }
+        .separator { display: flex; align-items: center; color: #64748b; font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .separator::before, .separator::after { content: ""; flex: 1; height: 1px; background: #334155; }
         .separator span { margin: 0 10px; }
 
-        /* General UI */
+        /* --- INTERNAL APP UI --- */
         .nav-btn { color: var(--text-secondary); padding: 0.5rem 1rem; font-weight: bold; transition: 0.2s; border-radius: 6px; }
         .nav-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
         .nav-active { color: var(--text-primary); background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); }
         
         .filter-pill {
             background: rgba(255,255,255,0.03); border: 1px solid var(--text-secondary);
-            color: var(--text-secondary); padding: 6px 16px; border-radius: 6px;
-            font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+            color: var(--text-secondary); padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s;
         }
         .filter-pill:hover, .filter-pill.active { background: var(--accent-main); color: white; border-color: var(--accent-main); }
 
+        /* Specific Colors for Resources */
+        .cat-Site { border-color: var(--col-site) !important; }
+        .cat-Shop { border-color: var(--col-shop) !important; }
+        .cat-Finishing { border-color: var(--col-fin) !important; }
+        .cat-Office { border-color: var(--col-office) !important; }
+        .cat-BIM { border-color: var(--col-bim) !important; }
+
+        /* Checkbox & Locked Weeks */
+        .week-locked { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
         .custom-checkbox {
             appearance: none; background: rgba(0,0,0,0.2); width: 1.25em; height: 1.25em;
             border: 2px solid #94a3b8; border-radius: 4px; display: grid; place-content: center; cursor: pointer;
@@ -151,8 +132,7 @@
 
         #loading-overlay {
             position: fixed; inset: 0; z-index: 200; background: var(--bg-deep);
-            display: flex; align-items: center; justify-content: center; flex-direction: column;
-            transition: opacity 0.5s;
+            display: flex; align-items: center; justify-content: center; flex-direction: column; transition: opacity 0.5s;
         }
         .loader {
             border: 4px solid #334155; border-top: 4px solid var(--accent-main);
@@ -161,7 +141,6 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .hidden { display: none !important; }
-        .week-locked { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
         .chart-container { position: relative; height: 300px; width: 100%; }
     </style>
 </head>
@@ -173,31 +152,22 @@
         <p class="text-sm font-bold animate-pulse text-blue-500">جاري الاتصال بالسيرفر...</p>
     </div>
 
-    <!-- Auth Modal (Replicating Image Design) -->
+    <!-- Auth Modal (Target UI) -->
     <div id="auth-modal" class="active">
         <div class="auth-card">
-            <!-- Header -->
             <h2 class="text-3xl font-bold text-white mb-1">تسجيل الدخول</h2>
-            <p class="text-slate-400 text-sm mb-8">Engineer OS Cloud</p>
+            <p class="text-slate-400 text-sm mb-8">Engineer OS</p>
             
             <form id="auth-form" onsubmit="handleAuth(event)">
-                <!-- Error Message -->
                 <div id="error-msg" class="hidden text-red-400 text-xs bg-red-500/10 p-2 rounded mb-4"></div>
-                
-                <!-- Inputs -->
                 <input type="email" id="email" class="auth-input" placeholder="البريد الإلكتروني" required>
                 <input type="password" id="password" class="auth-input" placeholder="كلمة المرور" required>
-                
-                <!-- Main Button -->
                 <button type="submit" class="btn-auth-primary" id="auth-btn-text">دخول</button>
             </form>
 
-            <!-- Separator -->
             <div class="separator"><span>أو</span></div>
 
-            <!-- Google Button -->
             <button onclick="signInWithGoogle()" class="btn-google mb-6">
-                <!-- Google SVG Logo -->
                 <svg class="w-5 h-5" viewBox="0 0 24 24">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -207,7 +177,6 @@
                 متابعة باستخدام Google
             </button>
             
-            <!-- Footer -->
             <div class="text-sm text-slate-400">
                 <span id="auth-toggle-text">ليس لديك حساب؟</span>
                 <button type="button" onclick="toggleAuthMode()" class="text-blue-400 hover:text-blue-300 font-bold mr-1 hover:underline">إنشاء حساب جديد</button>
@@ -215,7 +184,7 @@
         </div>
     </div>
 
-    <!-- Navbar -->
+    <!-- Navigation -->
     <nav class="glass-panel sticky top-0 z-40 border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -228,21 +197,17 @@
                 </div>
             </div>
             
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex gap-2 items-center">
+            <div class="hidden md:flex gap-1 items-center">
                 <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-btn nav-active">الرئيسية</button>
-                <button onclick="navigate('map')" id="nav-map" class="nav-btn">الخارطة</button>
+                <button onclick="navigate('map')" id="nav-map" class="nav-btn">خارطة المهمة</button>
                 <button onclick="navigate('resources')" id="nav-resources" class="nav-btn">المصادر</button>
-                <button onclick="navigate('aibim')" id="nav-aibim" class="nav-btn">الذكاء</button>
+                <button onclick="navigate('aibim')" id="nav-aibim" class="nav-btn">أدوات الذكاء</button>
+                <button onclick="navigate('mindset')" id="nav-mindset" class="nav-btn">عقلية المهندس</button>
             </div>
 
             <div class="flex items-center gap-2">
-                <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg bg-slate-700/50 hover:bg-slate-700 flex items-center justify-center text-white transition">
-                    <i class="fas fa-adjust"></i>
-                </button>
-                <button onclick="logout()" class="w-9 h-9 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 flex items-center justify-center transition" title="خروج">
-                    <i class="fas fa-power-off"></i>
-                </button>
+                <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg bg-slate-700/50 hover:bg-slate-700 flex items-center justify-center text-white transition"><i class="fas fa-adjust"></i></button>
+                <button onclick="logout()" class="w-9 h-9 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 flex items-center justify-center transition"><i class="fas fa-power-off"></i></button>
             </div>
         </div>
     </nav>
@@ -250,11 +215,11 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 py-8">
         
-        <!-- DASHBOARD -->
+        <!-- DASHBOARD (Restored V18 Logic) -->
         <section id="view-dashboard" class="space-y-6 animate-fade-in">
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="glass-panel p-6 rounded-xl border border-blue-500/20">
-                    <h2 class="text-lg font-bold text-primary mb-2">تحليل الفجوة (Skills Gap)</h2>
+                <div class="glass-panel p-6 rounded-xl relative overflow-hidden">
+                    <h2 class="text-xl font-bold text-primary mb-4">تحليل الفجوة (Skill Gap)</h2>
                     <div class="chart-container"><canvas id="gapRadarChart"></canvas></div>
                 </div>
 
@@ -268,58 +233,77 @@
                             <div id="main-progress-bar" class="h-full bg-blue-500 transition-all duration-1000" style="width: 0%"></div>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-3 gap-4">
                         <div class="glass-panel p-4 rounded-xl text-center">
                             <span class="block text-2xl font-bold text-white" id="completed-tasks">0</span>
                             <span class="text-xs text-secondary">مهام</span>
                         </div>
                         <div class="glass-panel p-4 rounded-xl text-center">
-                            <span class="block text-2xl font-bold text-amber-400" id="xp-points">0</span>
+                            <span class="block text-2xl font-bold text-amber-500" id="xp-points">0</span>
                             <span class="text-xs text-secondary">XP</span>
                         </div>
                         <div class="glass-panel p-4 rounded-xl text-center">
-                            <span class="block text-2xl font-bold text-white" id="current-week-disp">1</span>
+                            <span class="block text-2xl font-bold text-green-500" id="current-week-disp">1</span>
                             <span class="text-xs text-secondary">أسبوع</span>
                         </div>
                     </div>
+                    <button onclick="navigate('map')" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded transition">متابعة الخطة &larr;</button>
                 </div>
             </div>
         </section>
 
-        <!-- MAP -->
+        <!-- MAP (FULL 14 WEEKS RESTORED) -->
         <section id="view-map" class="hidden space-y-4">
-            <h2 class="text-2xl font-bold text-primary mb-4 border-r-4 border-green-500 pr-3">خارطة الطريق</h2>
+            <h2 class="text-2xl font-bold text-primary mb-4 border-r-4 border-green-500 pr-3">خارطة المهمة (14 أسبوع)</h2>
             <div id="schedule-container" class="space-y-4"></div>
         </section>
 
-        <!-- RESOURCES -->
+        <!-- RESOURCES (FULL GOLDEN LIST RESTORED) -->
         <section id="view-resources" class="hidden space-y-6">
             <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-primary mb-4">المكتبة الهندسية</h2>
+                <h2 class="text-2xl font-bold text-primary mb-3">القائمة الذهبية</h2>
                 <div class="flex flex-wrap justify-center gap-2">
                     <button onclick="filterResources('all')" class="filter-pill active" id="btn-all">الكل</button>
                     <button onclick="filterResources('Site')" class="filter-pill" id="btn-Site">تنفيذ</button>
                     <button onclick="filterResources('Shop')" class="filter-pill" id="btn-Shop">شوب</button>
                     <button onclick="filterResources('Finishing')" class="filter-pill" id="btn-Finishing">تشطيبات</button>
                     <button onclick="filterResources('Office')" class="filter-pill" id="btn-Office">مكتب فني</button>
+                    <button onclick="filterResources('BIM')" class="filter-pill" id="btn-BIM">BIM</button>
                 </div>
             </div>
-            <div id="resources-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+            <div id="resources-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- AI/BIM -->
+        <!-- AI & BIM -->
         <section id="view-aibim" class="hidden space-y-6">
+            <h2 class="text-2xl font-bold text-primary mb-4">أدوات الذكاء الاصطناعي</h2>
             <div class="grid lg:grid-cols-2 gap-6">
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-green-500 bg-slate-800/40">
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-green-500 bg-slate-800/20">
                     <h3 class="text-xl font-bold text-white mb-2">NotebookLM ⚡</h3>
-                    <p class="text-sm text-gray-300 mb-4">ذاكر الكود المصري بذكاء. ارفع الـ PDF واسأله.</p>
-                    <a href="https://notebooklm.google.com/" target="_blank" class="text-green-400 text-sm font-bold">فتح الأداة &rarr;</a>
+                    <p class="text-sm text-secondary mb-4">مذاكرة الأكواد: ارفع ملفات الكود واسأله.</p>
+                    <a href="https://notebooklm.google.com/" target="_blank" class="text-green-400 font-bold text-sm">فتح الأداة ↗</a>
                 </div>
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-blue-500 bg-slate-800/40">
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-blue-500 bg-slate-800/20">
                     <h3 class="text-xl font-bold text-white mb-2">ChatGPT / Claude 🤖</h3>
-                    <p class="text-sm text-gray-300 mb-4">المساعد الشخصي لكتابة الإيميلات والتقارير.</p>
-                    <a href="https://chatgpt.com/" target="_blank" class="text-blue-400 text-sm font-bold">فتح ChatGPT &rarr;</a>
+                    <p class="text-sm text-secondary mb-4">كتابة الإيميلات والتقارير اليومية.</p>
+                    <a href="https://chatgpt.com/" target="_blank" class="text-blue-400 font-bold text-sm">فتح ChatGPT ↗</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- MINDSET (RESTORED) -->
+        <section id="view-mindset" class="hidden space-y-6">
+            <h2 class="text-2xl font-bold text-primary mb-4">عقلية المهندس</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass-panel p-6 rounded-xl border-r-4 border-cyan-500 bg-slate-800/20">
+                    <h3 class="text-lg font-bold text-white mb-2">الإنتاجية والالتزام</h3>
+                    <p class="text-xs text-secondary mb-2">كتاب: العادات الذرية</p>
+                    <a href="https://www.youtube.com/results?search_query=Atomic+Habits+Summary" target="_blank" class="text-cyan-500 text-xs font-bold hover:underline">استماع للملخص &rarr;</a>
+                </div>
+                <div class="glass-panel p-6 rounded-xl border-r-4 border-cyan-500 bg-slate-800/20">
+                    <h3 class="text-lg font-bold text-white mb-2">القيادة وإدارة البشر</h3>
+                    <p class="text-xs text-secondary mb-2">كتاب: كيف تكسب الأصدقاء</p>
+                    <a href="https://www.youtube.com/results?search_query=How+to+win+friends+and+influence+people" target="_blank" class="text-cyan-500 text-xs font-bold hover:underline">استماع للملخص &rarr;</a>
                 </div>
             </div>
         </section>
@@ -328,7 +312,7 @@
 
     <script>
         // ==========================================
-        // 1. CONFIG & SYSTEM INIT
+        // 1. CONFIG & INIT
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyCgDeatPSz2aQS6vYwPfgJiTRJTIPzj5eM",
@@ -348,27 +332,40 @@
             auth = firebase.auth();
             db = firebase.firestore();
             googleProvider = new firebase.auth.GoogleAuthProvider();
-            console.log("🟢 System Connected: Firebase Online");
         } catch (e) {
-            console.error("🔴 System Error:", e);
-            document.getElementById('loading-overlay').innerHTML = "<p class='text-red-500'>خطأ في الاتصال</p>";
+            console.error(e);
+            document.getElementById('loading-overlay').innerHTML = "<p class='text-red-500'>خطأ اتصال</p>";
         }
 
         // ==========================================
-        // 2. DATA
+        // 2. DATA (THE FULL V18 CONTENT RESTORED)
         // ==========================================
         const resourcesData = [
-            { title: "تنفيذ الخرسانات", instructor: "م. وليد الجنيدي", cat: "Site", url: "https://www.youtube.com/playlist?list=PLfVgc3qLn2xb0TIY0nc3hVPTjcX4BTAiT", color: "border-green-500" },
-            { title: "إعداد الشوب دروينج", instructor: "م. كريم عادل", cat: "Shop", url: "https://www.youtube.com/playlist?list=PLDHUI0BRXyH_cZcipUw1E0Mi0OkjBl4pO", color: "border-blue-500" },
-            { title: "التشطيبات المعمارية", instructor: "منارة التنفيذ", cat: "Finishing", url: "https://www.youtube.com/playlist?list=PLYibZreE8qlJmESeLalkpwrERA-IKNfv5", color: "border-amber-500" },
-            { title: "المكتب الفني", instructor: "م. أحمد حسن", cat: "Office", url: "https://www.youtube.com/playlist?list=PLabf5mJYBmPtfDvqma1zpdI5_6OMl2IH9", color: "border-purple-500" }
+            { title: "تنفيذ الخرسانات", instructor: "م. وليد الجنيدي", cat: "Site", url: "#", cssClass: "cat-Site" },
+            { title: "إعداد الشوب دروينج", instructor: "م. كريم عادل", cat: "Shop", url: "#", cssClass: "cat-Shop" },
+            { title: "تفاصيل التسليح", instructor: "م. أحمد التريسي", cat: "Shop", url: "#", cssClass: "cat-Shop" },
+            { title: "التشطيبات (موقعي)", instructor: "منارة التنفيذ", cat: "Finishing", url: "#", cssClass: "cat-Finishing" },
+            { title: "فنيات التشطيبات", instructor: "م. محمد بدوي", cat: "Finishing", url: "#", cssClass: "cat-Finishing" },
+            { title: "المكتب الفني", instructor: "م. أحمد حسن", cat: "Office", url: "#", cssClass: "cat-Office" },
+            { title: "Revit Structure", instructor: "م. كريم عادل", cat: "BIM", url: "#", cssClass: "cat-BIM" }
         ];
 
+        // FULL 14 WEEKS
         const scheduleWeeks = [
-            { id: 1, title: "أسبوع 1: الأساسات", source: "وليد الجنيدي", days: ["الحفر والإحلال", "الخرسانة العادية", "القواعد المسلحة", "استلام القواعد"] },
+            { id: 1, title: "أسبوع 1: الأعمال الترابية والأساسات", source: "وليد الجنيدي", days: ["أعمال الحفر والإحلال", "الخرسانة العادية", "القواعد المسلحة", "استلام القواعد"] },
             { id: 2, title: "أسبوع 2: الأعمدة", source: "وليد الجنيدي", days: ["نجارة الأعمدة", "حدادة الأعمدة", "استلام الأعمدة", "الصب والمعالجة"] },
-            { id: 3, title: "أسبوع 3: الأسقف", source: "وليد الجنيدي", days: ["نجارة الأسقف", "حدادة الأسقف", "الكمرات والسقوط", "استلام السقف"] },
-            { id: 4, title: "أسبوع 4: المباني", source: "محمد بدوي", days: ["أنواع الطوب", "أدوات البناء", "طرق الربط", "الاستلام"] }
+            { id: 3, title: "أسبوع 3: الأسقف", source: "وليد الجنيدي", days: ["نجارة الأسقف (Solid)", "نجارة الأسقف (Flat)", "تسليح الأسقف", "استلام السقف"] },
+            { id: 4, title: "أسبوع 4: السلالم وضبط الجودة", source: "وليد الجنيدي", days: ["نجارة السلالم", "اختبار الهبوط (Slump)", "مكعبات الكسر", "معايير القبول"] },
+            { id: 5, title: "أسبوع 5: أعمال المباني", source: "محمد بدوي", days: ["أنواع الطوب", "تجهيز العراميس", "القدة والميزان", "استلام الفتحات"] },
+            { id: 6, title: "أسبوع 6: العزل والسباكة", source: "منارة التنفيذ", days: ["عزل الرطوبة", "اختبار الغمر", "تأسيس السباكة", "كبس المواسير"] },
+            { id: 7, title: "أسبوع 7: البياض والكهرباء", source: "منارة التنفيذ", days: ["الطرطشة والبؤج", "المحارة (الملء)", "تأسيس الكهرباء", "سحب الأسلاك"] },
+            { id: 8, title: "أسبوع 8: الأرضيات والدهانات", source: "منارة التنفيذ", days: ["تركيب السيراميك", "تجهيز الحوائط", "سحبة المعجون", "التشطيب النهائي"] },
+            { id: 9, title: "أسبوع 9: أساسيات الشوب دروينج", source: "كريم عادل", days: ["واجهة ASD", "رسم الأسياخ", "حساب الوصلات", "إعداد اللوحة"] },
+            { id: 10, title: "أسبوع 10: تفريد العناصر 1", source: "أحمد التريسي", days: ["القواعد المنفصلة", "السملات", "الأعمدة", "جدول التسليح"] },
+            { id: 11, title: "أسبوع 11: تفريد العناصر 2", source: "أحمد التريسي", days: ["الكمرات المستمرة", "البلاطات المصمتة", "الفلات سلاب", "مشروع نهائي"] },
+            { id: 12, title: "أسبوع 12: المكتب الفني", source: "أحمد حسن", days: ["المقايسة (BOQ)", "تحليل الأسعار", "المستخلصات", "البرنامج الزمني"] },
+            { id: 13, title: "أسبوع 13: أساسيات الريفيت 1", source: "كريم عادل", days: ["واجهة البرنامج", "نمذجة الأعمدة", "نمذجة الأساسات", "أوامر التعديل"] },
+            { id: 14, title: "أسبوع 14: أساسيات الريفيت 2", source: "كريم عادل", days: ["البلاطات والكمرات", "التسليح (Rebar)", "جداول الحصر", "إخراج اللوحات"] }
         ];
 
         // ==========================================
@@ -382,7 +379,7 @@
             const toggle = document.getElementById('auth-toggle-text');
             const toggleBtn = toggle.nextElementSibling;
             
-            if (isSignup) {
+            if(isSignup) {
                 title.innerText = "إنشاء حساب جديد";
                 btn.innerText = "تسجيل حساب";
                 toggle.innerText = "لديك حساب بالفعل؟";
@@ -406,29 +403,21 @@
                 if (isSignup) await auth.createUserWithEmailAndPassword(email, pass);
                 else await auth.signInWithEmailAndPassword(email, pass);
             } catch (error) {
-                let msg = "خطأ غير متوقع: " + error.code;
-                if (error.code === 'auth/wrong-password') msg = "كلمة المرور غير صحيحة";
-                if (error.code === 'auth/user-not-found') msg = "البريد غير مسجل";
-                if (error.code === 'auth/email-already-in-use') msg = "البريد مسجل مسبقاً";
-                if (error.code === 'auth/weak-password') msg = "كلمة المرور ضعيفة";
-                errorDiv.innerText = msg;
+                errorDiv.innerText = "خطأ: " + error.code;
                 errorDiv.classList.remove('hidden');
             }
         }
 
         async function signInWithGoogle() {
-            try { await auth.signInWithPopup(googleProvider); } 
-            catch (error) { console.error(error); }
+            try { await auth.signInWithPopup(googleProvider); } catch(e) { console.error(e); }
         }
 
         function logout() { auth.signOut().then(() => location.reload()); }
 
-        // --- AUTH STATE ---
         if (auth) {
             auth.onAuthStateChanged(async (user) => {
                 const modal = document.getElementById('auth-modal');
                 const loading = document.getElementById('loading-overlay');
-                
                 if (user) {
                     currentUser = user;
                     document.getElementById('user-email-display').innerText = user.email.split('@')[0];
@@ -462,7 +451,6 @@
             await db.collection('users').doc(currentUser.uid).set(appState, { merge: true });
         }
 
-        // --- APP LOGIC ---
         function toggleTask(taskId, weekId) {
             if (appState.completed.includes(taskId)) appState.completed = appState.completed.filter(id => id !== taskId);
             else appState.completed.push(taskId);
@@ -477,7 +465,7 @@
             document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${view}`).classList.remove('hidden');
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
-            document.getElementById(`nav-${view}`).classList.add('nav-active');
+            if(document.getElementById(`nav-${view}`)) document.getElementById(`nav-${view}`).classList.add('nav-active');
             appState.currentView = view;
             saveCloudData();
         }
@@ -526,11 +514,11 @@
             const filtered = cat === 'all' ? resourcesData : resourcesData.filter(r => r.cat === cat);
             filtered.forEach(r => {
                 grid.innerHTML += `
-                    <div class="glass-panel p-5 rounded-xl border-l-4 ${r.color} hover:bg-slate-800/60 transition group">
+                    <div class="glass-panel p-5 rounded-xl border-l-4 ${r.cssClass} hover:bg-slate-800/60 transition group">
                         <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 bg-black/20 px-2 py-1 rounded mb-2 inline-block">${r.cat}</span>
                         <h3 class="font-bold text-white mb-1">${r.title}</h3>
                         <p class="text-xs text-gray-400 mb-4">${r.instructor}</p>
-                        <a href="${r.url}" target="_blank" class="block w-full py-2 bg-slate-700/50 hover:bg-blue-600 text-center rounded text-sm font-bold text-gray-300 hover:text-white transition">مشاهدة</a>
+                        <a href="${r.url}" class="block w-full py-2 bg-slate-700/50 hover:bg-blue-600 text-center rounded text-sm font-bold text-gray-300 hover:text-white transition">مشاهدة</a>
                     </div>`;
             });
         }
@@ -565,23 +553,13 @@
                         borderWidth: 2,
                         pointBackgroundColor: '#fff'
                     }, {
-                        label: 'Target',
-                        data: [100, 100, 100, 100, 100],
-                        borderColor: 'rgba(255, 255, 255, 0.1)',
-                        borderWidth: 1,
-                        borderDash: [5, 5],
-                        pointRadius: 0
+                        label: 'Target', data: [100, 100, 100, 100, 100],
+                        borderColor: 'rgba(255, 255, 255, 0.1)', borderWidth: 1, borderDash: [5, 5], pointRadius: 0
                     }]
                 },
                 options: {
                     scales: {
-                        r: {
-                            min: 0, max: 100,
-                            angleLines: { color: 'rgba(255,255,255,0.05)' },
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            pointLabels: { color: '#94a3b8', font: { size: 10 } },
-                            ticks: { display: false }
-                        }
+                        r: { min: 0, max: 100, angleLines: { color: 'rgba(255,255,255,0.05)' }, grid: { color: 'rgba(255,255,255,0.05)' }, pointLabels: { color: '#94a3b8', font: { size: 10 } }, ticks: { display: false } }
                     },
                     plugins: { legend: { display: false } },
                     maintainAspectRatio: false
